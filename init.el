@@ -53,9 +53,14 @@
 			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 (package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+  (package-install 'use-package))
+
 ;;防止反复调用 package-refresh-contents 会影响加载速度
-(when (not package-archive-contents)
-  (package-refresh-contents))
+;;(when (not package-archive-contents)
+;;  (package-refresh-contents))
 
 ;;modeline上显示我的所有的按键和执行的命令
 (package-install 'keycast)
@@ -116,6 +121,60 @@
 (require 'evil)
 (evil-mode 1)
 
+(unless (package-installed-p 'rainbow-delimiters)
+  (package-install 'rainbow-delimiters)) ;; 彩虹括号
+(require 'rainbow-delimiters)
+(rainbow-delimiters-mode t)
+
+(unless (package-installed-p 'doom-modeline)
+  (package-install 'doom-modeline))
+(doom-modeline-mode 1)
+
+(unless (package-installed-p 'keyfreq)
+  (package-install 'keyfreq)) ;; 统计按键频率
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
+(setq keyfreq-excluded-commands '(self-insert-command
+				  forward-char
+				  backward-char
+				  previous-char
+       				  next-line))
+
+(setq org-startup-indented t)
+
+(setq use-package-always-ensure t)
+
+(use-package lsp-mode
+  :ensure t
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (python-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :ensure t :commands lsp-ui-mode)
+;; if you are helm user
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+(use-package lsp-ivy :ensure t :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :ensure t :commands lsp-treemacs-errors-list)
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+			 (require 'lsp-pyright)
+			 (lsp)))) ;; or lsp-deferred
+
+;; optional if you want which-key integration
+(use-package which-key
+  :ensure t
+    :config
+    (which-key-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -123,8 +182,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("22f080367d0b7da6012d01a8cd672289b1debfb55a76ecdb08491181dcb29626" default))
+ '(lsp-ui-sideline-show-hover t)
  '(package-selected-packages
-   '(evil dracula-theme monokai wgrep embark-consult consult embark marginalia orderless vertico keycast company)))
+   '(lsp-pyright which-key use-package keyfreq doom-modeline rainbow-delimiters evil dracula-theme monokai wgrep embark-consult consult embark marginalia orderless vertico keycast company)))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
