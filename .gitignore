@@ -1,2 +1,6 @@
 elpa
 auto-save-list
+/eshell/
+/transient/
+./recentf
+
