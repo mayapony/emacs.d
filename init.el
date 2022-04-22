@@ -1,6 +1,15 @@
 ;; -*- lexical-binding: t -*-
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
+(require 'package)
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(package-initialize)
+
+;; Package Management
+;; ----------------------------------------------------
+(require 'init-packages)
+
 ;; UI Management
 ;; ----------------------------------------------------
 (require 'init-ui)
@@ -9,10 +18,9 @@
 ;; ----------------------------------------------------
 (require 'init-better-defaults)
 
-;; Package Management
+;; Plugin Management
 ;; ----------------------------------------------------
-(require 'init-packages)
-
+(require 'init-plugin)
 
 (setq tab-always-indent 'complete) ;; tab 进行代码complete
 
@@ -22,40 +30,26 @@
   (find-file "~/.emacs.d/init.el")
   )
 
-(global-company-mode 1)
-(setq company-minimum-prefix-length 1)
-(setq company-idle-delay 0)
-(define-key company-active-map (kbd "C-n") 'company-select-next)
-(define-key company-active-map (kbd "C-p") 'company-select-previous)
+;; (add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'after-init-hook 
+;;   (lambda ()
+;;     ((setq company-minimum-prefix-length 1)
+;;       (setq company-idle-delay 0)
+;;       (define-key company-active-map (kbd "C-n") 'company-select-next)
+;;       (define-key company-active-map (kbd "C-p") 'company-select-previous)
+;;      )))
+;; (setq company-minimum-prefix-length 1)
+;; (setq company-idle-delay 0)
+;; (define-key company-active-map (kbd "C-n") 'company-select-next)
+;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 (global-set-key (kbd "C-h C-v") 'find-variable)
 (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
-(unless (package-installed-p 'use-package)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
-  (package-install 'use-package))
-
-;;防止反复调用 package-refresh-contents 会影响加载速度
-;;(when (not package-archive-contents)
-;;  (package-refresh-contents))
-
-;;modeline上显示我的所有的按键和执行的命令
-;; (package-install 'keycast)
-;; (keycast-mode t)
-
-;; 增强minibuffer 的补全
-(package-install 'vertico)
-(vertico-mode t)
-
 ;; M-x 模糊搜索
 (package-install 'orderless)
 (setq completion-styles '(orderless))
-
-;; minibuffer 内显示更加详细的信息
-(package-install 'marginalia)
-(marginalia-mode t)
 
 ;;
 (package-install 'embark)
@@ -114,7 +108,6 @@
 
 (setq org-startup-indented t)
 
-(setq use-package-always-ensure t)
 
 (package-install 'magit)
 

@@ -6,17 +6,22 @@
 (set-face-attribute 'default nil :height 180) ;; 文字大小
 (global-hl-line-mode 1) ;; 高亮当前行
 
-(package-install 'dracula-theme) ;; 安装 dracula-theme 字体
-(load-theme 'dracula 1) ;; 加载主题
+;; ;; dracula 主题
+(use-package dracula-theme
+  :ensure t
+  :config
+  (load-theme 'dracula 1))
 
+;; 彩虹括号
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+    (rainbow-delimiters-mode))
 
-(unless (package-installed-p 'rainbow-delimiters)
-  (package-install 'rainbow-delimiters)) ;; 彩虹括号
-(require 'rainbow-delimiters)
-(rainbow-delimiters-mode t)
+;; doom 下面的状态栏样式
+(use-package doom-modeline
+  :ensure t
+  :config
+    (doom-modeline-mode))
 
-
-(unless (package-installed-p 'doom-modeline)
-  (package-install 'doom-modeline))
-(doom-modeline-mode 1)
 (provide 'init-ui)

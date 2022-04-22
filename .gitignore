@@ -2,5 +2,7 @@ elpa
 auto-save-list
 /eshell/
 /transient/
-./recentf
-
+elpy
+transient
+elpy/*
+recentf
